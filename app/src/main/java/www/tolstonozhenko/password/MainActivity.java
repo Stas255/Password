@@ -2,9 +2,22 @@ package www.tolstonozhenko.password;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public void onButtonClick(View view)
+    {
+        Intent test = new Intent("android.intent.action.TEST");
+        startActivity(test);
+        //setContentView(R.layout.activity_test);
+        //Toast.makeText(this, "Зачем вы нажали?", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
