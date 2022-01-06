@@ -33,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:text="stastolsto@gmail.com"
                 android:inputType="textEmailAddress"></EditText>
 
             <TextView
@@ -44,6 +45,7 @@
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="stastolsto"
                 android:layout_marginBottom="10dp"
                 android:inputType="textPassword"></EditText>
 

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,10 +29,10 @@ import java.io.UnsupportedEncodingException;
 
 public class Login extends AccountAuthenticatorActivity {
 
-    public static final String ARG_ACCOUNT_TYPE = "accountType";
-    public static final String ARG_AUTH_TOKEN_TYPE = "authTokenType";
-    public static final String ARG_IS_ADDING_NEW_ACCOUNT = "isAddingNewAccount";
-    public static final String PARAM_USER_PASSWORD = "password";
+    public static final String APP_PREFERENCES = "mysettings";
+    public static final String APP_PREFERENCES_USER = "User";
+    public static final String APP_PREFERENCES_TOKEN = "Token";
+    SharedPreferences mSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class Login extends AccountAuthenticatorActivity {
         Button button = (Button) findViewById(R.id.bLogin);
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,20 +56,29 @@ public class Login extends AccountAuthenticatorActivity {
                                 "http://localhost:8000/api/auth/signin", jsonBody, new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                JSONObject response1 = response;
-
+                                SharedPreferences.Editor editor = mSettings.edit();
+                                try {
+                                    editor.putString(APP_PREFERENCES_TOKEN, response.getString("accessToken"));
+                                    editor.putString(APP_PREFERENCES_USER, response.toString());
+                                    editor.apply();
+                                    startActivity(new Intent(Login.this, Passwords.class));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }, new Response.ErrorListener() { // в случае возникновеня ошибки
                             @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                try {
-                                    String responseBody = new String( volleyError.networkResponse.data, "utf-8" );
-                                    JSONObject jsonObject = new JSONObject( responseBody );
-                                    Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                                } catch ( JSONException e ) {
-                                    //Handle a malformed json response
-                                } catch (UnsupportedEncodingException error){
-
+                            public void onErrorResponse(VolleyError error) {
+                                JSONObject body;
+                                if(error.networkResponse.data!=null) {
+                                    try {
+                                        body = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
+                                        Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         });

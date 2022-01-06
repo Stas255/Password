@@ -5,6 +5,12 @@
       <map>
         <entry key="..\:/AndroidStudioProjects/Stas/Password/app/src/main/res/layout/activity_login.xml" value="0.23020833333333332" />
         <entry key="..\:/AndroidStudioProjects/Stas/Password/app/src/main/res/layout/activity_register.xml" value="0.129981884057971" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/layout/activity_main.xml" value="0.12" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/layout/activity_passwords.xml" value="0.5" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/layout/password_adapter.xml" value="0.33" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/layout/row.xml" value="0.5" />
+        <entry key="..\:/Users/Oleg/StudioProjects/Password/app/src/main/res/xml/network.xml" value="0.22083333333333333" />
       </map>
     </option>
   </component>
