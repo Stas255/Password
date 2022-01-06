@@ -13,17 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AccountAuthenticatorActivity {
 
@@ -35,7 +39,7 @@ public class Register extends AccountAuthenticatorActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); /////////////////////////////////////////////////////////////////???
+        setContentView(R.layout.activity_register);
 
         Button button = (Button) findViewById(R.id.bRegister);
 
@@ -54,27 +58,22 @@ public class Register extends AccountAuthenticatorActivity {
                         jsonBody.put("username", username.getText());
                         jsonBody.put("email", email.getText());
                         jsonBody.put("password", password.getText());
-                        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                "http://localhost:8000/api/auth/register", jsonBody, new Response.Listener<JSONObject>() {
+                        jsonBody.put("roles", "['user']");
+                        final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
+                                "http://localhost:8000/api/auth/signup", new Response.Listener<String>() {
                             @Override
-                            public void onResponse(JSONObject response) {
-                                SharedPreferences.Editor editor = mSettings.edit();
-                                try {
-                                    editor.putString(APP_PREFERENCES_TOKEN, response.getString("accessToken"));
-                                    editor.putString(APP_PREFERENCES_USER, response.toString());    /////////////////////////////////////////////////////////////////???
-                                    editor.apply();
-                                    startActivity(new Intent(Register.this, Passwords.class));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            public void onResponse(String response) {
+                                String result = response;
+                                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(Register.this, Login.class));
                             }
                         }, new Response.ErrorListener() { // в случае возникновеня ошибки
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 JSONObject body;
-                                if(error.networkResponse.data!=null) {
+                                if (error.networkResponse != null && error.networkResponse.data != null) {
                                     try {
-                                        body = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
+                                        body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
                                         Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
                                     } catch (UnsupportedEncodingException e) {
                                         e.printStackTrace();
@@ -83,7 +82,17 @@ public class Register extends AccountAuthenticatorActivity {
                                     }
                                 }
                             }
-                        });
+                        }) {
+                            @Override
+                            public byte[] getBody() throws AuthFailureError {
+                                return jsonBody.toString().getBytes();
+                            }
+
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json";
+                            }
+                        };
                         queue.add(request);
                     } catch (JSONException e) {
                         Log.e("MYAPP", "unexpected JSON exception", e);

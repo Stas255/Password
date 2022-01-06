@@ -42,6 +42,9 @@ public class Login extends AccountAuthenticatorActivity {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        if(mSettings.contains(Login.APP_PREFERENCES_TOKEN) && mSettings.contains(Login.APP_PREFERENCES_USER)){
+            startActivity(new Intent(this, Passwords.class));
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

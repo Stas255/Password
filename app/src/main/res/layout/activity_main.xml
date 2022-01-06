@@ -8,22 +8,115 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="388dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="37dp"
+        android:layout_marginBottom="24dp"
+        android:text="Hi, this is Safe Password Storage. \n
+You can test the project."
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.054" />
 
     <Button
         android:id="@+id/Lbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginBottom="91dp"
-        android:text="Button"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="88dp"
+        android:text="Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/LRbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="276dp"
+        android:layout_marginBottom="88dp"
+        android:text="Register"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/ETPasswordMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="9dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/GetButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <EditText
+        android:id="@+id/ETUnicPasswordMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="103dp"
+        android:layout_marginEnd="99dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="textPersonName"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/TVUnicPasswordMain2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TVUnicPasswordMain" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="110dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="7dp"
+        android:text="Password"
+        app:layout_constraintBottom_toTopOf="@+id/ETPasswordMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/TVUnicPasswordMain"
+        android:layout_width="110dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginEnd="151dp"
+        android:layout_marginBottom="19dp"
+        android:text="Unic Password"
+        app:layout_constraintBottom_toTopOf="@+id/ETUnicPasswordMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/GetButton" />
+
+    <TextView
+        android:id="@+id/TVUnicPasswordMain2"
+        android:layout_width="213dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="250dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ETUnicPasswordMain" />
+
+    <Button
+        android:id="@+id/GetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="162dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="14dp"
+        android:text="Get"
+        app:layout_constraintBottom_toTopOf="@+id/TVUnicPasswordMain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ETPasswordMain" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

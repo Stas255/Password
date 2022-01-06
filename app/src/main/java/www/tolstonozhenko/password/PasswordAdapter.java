@@ -406,7 +406,6 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                                             return headers;
                                         }
                                     };
-                                    ;
                                     queue.add(request);
                                 }
                             } catch (JSONException e) {
