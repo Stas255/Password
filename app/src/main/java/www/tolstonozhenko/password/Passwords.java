@@ -39,6 +39,8 @@ public class Passwords extends AppCompatActivity {
     RecyclerView.Adapter pAdapter;
     RecyclerView.Adapter pNewAdapter;
 
+    ArrayList<Password> passwords = new ArrayList<Password>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +114,7 @@ public class Passwords extends AppCompatActivity {
     }
 
     private void SetPasswordsInLayout(JSONArray responses) {
-        ArrayList<Password> passwords = new ArrayList<Password>();
+        passwords = new ArrayList<Password>();
         for (int i=0; i < responses.length(); i++) {
             try {
                 JSONObject response = responses.getJSONObject(i);
@@ -129,7 +131,26 @@ public class Passwords extends AppCompatActivity {
         pRecyclerView.setAdapter(pAdapter);
     }
 
-    public void GetPasswordById(String id) {
+    public void GetPasswordById(String id, PasswordAdapter.Action action) {
+        int len=passwords.size();
+        Password password = null;
+        for(int i=0; i<len; i++) {
+            if (passwords.get(i).id.equals(id)) {
+                password = passwords.get(i);
+                break;
+            }
+        }
+        if(password == null){
+            Toast.makeText(getApplicationContext(), "Cannot find password", Toast.LENGTH_SHORT).show();
+            return;
+        }else {
+            pRecyclerView = findViewById(R.id.onePass);
+            pRecyclerView.setHasFixedSize(true);
+            pLayoutManager = new LinearLayoutManager(this);
+            pNewAdapter = new PasswordAdapter(password, action, this);
+            pRecyclerView.setLayoutManager(pLayoutManager);
+            pRecyclerView.setAdapter(pNewAdapter);
+        }
 
     }
 }

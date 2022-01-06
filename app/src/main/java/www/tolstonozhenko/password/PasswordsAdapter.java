@@ -37,7 +37,13 @@ public class PasswordsAdapter extends RecyclerView.Adapter<PasswordsAdapter.View
         holder.bGet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pPasswords1.GetPasswordById(pPasswords.get(position).id);
+                pPasswords1.GetPasswordById(pPasswords.get(position).id, PasswordAdapter.Action.GET);
+            }
+        });
+        holder.bUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pPasswords1.GetPasswordById(pPasswords.get(position).id, PasswordAdapter.Action.UPDATE);
             }
         });
     }
