@@ -6,8 +6,11 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Register extends AccountAuthenticatorActivity {
-
+    float x1,x2,y1,y2;
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_USER = "User";
     public static final String APP_PREFERENCES_TOKEN = "Token";
@@ -104,5 +107,29 @@ public class Register extends AccountAuthenticatorActivity {
                 }
             }
         });
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:{
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            }
+            case MotionEvent.ACTION_UP:{
+                x2 = event.getX();
+                y2 = event.getY();
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                if(x1 <x2 && ((x2-x1)/width) > 0.6){
+                    startActivity(new Intent(Register.this, MainActivity.class));
+                }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
+                    startActivity(new Intent(Register.this, Login.class));
+                }
+            }
+        }
+        return false;
     }
 }

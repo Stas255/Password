@@ -2,9 +2,14 @@ package www.tolstonozhenko.password;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,14 +30,16 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
-public class MainActivity extends AppCompatActivity {
+import www.tolstonozhenko.password.configuration.DB;
+import www.tolstonozhenko.password.request.VolleyResponseListener;
+import www.tolstonozhenko.password.request.VolleyUtils;
 
+public class MainActivity extends AppCompatActivity {
+    float x1,x2,y1,y2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button button = (Button) findViewById(R.id.Lbutton);
-        Button button2 = (Button) findViewById(R.id.LRbutton);
 
         Button button3 = (Button) findViewById(R.id.GetButton);
 
@@ -43,20 +50,6 @@ public class MainActivity extends AppCompatActivity {
         TextView tVPass = (TextView) findViewById(R.id.TVUnicPasswordMain2);
         tVPass.setText("");
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, Login.class));
-            }
-        });
-
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, Register.class));
-            }
-        });
-        MainActivity m = this;
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,16 +62,20 @@ public class MainActivity extends AppCompatActivity {
                 tVPass.setText("");
                 if(pass.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Enter test password", Toast.LENGTH_SHORT).show();
-                }else{
-                    RequestQueue queue = Volley.newRequestQueue(m);
+                }else {
+                    RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                     JSONObject jsonBody = new JSONObject();
                     try {
                         jsonBody.put("password", pass);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                            "http://localhost:8000/simple/getUnicPassword/", jsonBody, new Response.Listener<JSONObject>() {
+                    VolleyUtils.makeJsonObjectRequest(MainActivity.this, DB.HTPP_URL_GET_UNIC_PASSWORD, jsonBody, new VolleyResponseListener() {
+                        @Override
+                        public void onError(String message) {
+
+                        }
+
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
@@ -92,27 +89,35 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                    }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            JSONObject body;
-                            if(error.networkResponse != null && error.networkResponse.data!=null) {
-                                try {
-                                    body = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
-                                    Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
                     });
-                    queue.add(request);
                 }
             }
         });
 
+    }
 
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:{
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            }
+            case MotionEvent.ACTION_UP:{
+                x2 = event.getX();
+                y2 = event.getY();
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                if(x1 <x2 && ((x2-x1)/width) > 0.6){
+                    startActivity(new Intent(MainActivity.this, Login.class));
+                }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
+                    startActivity(new Intent(MainActivity.this, Register.class));
+                }
+            }
+        }
+        return false;
     }
 }
+

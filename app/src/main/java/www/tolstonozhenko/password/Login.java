@@ -8,8 +8,11 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,22 +28,24 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import www.tolstonozhenko.password.configuration.DB;
+import www.tolstonozhenko.password.request.VolleyResponseListener;
+import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class Login extends AccountAuthenticatorActivity {
-
+    float x1,x2,y1,y2;
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_USER = "User";
     public static final String APP_PREFERENCES_TOKEN = "Token";
     SharedPreferences mSettings;
+    Login l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.l = this;
         setContentView(R.layout.activity_login);
         Button button = (Button) findViewById(R.id.bLogin);
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if(mSettings.contains(Login.APP_PREFERENCES_TOKEN) && mSettings.contains(Login.APP_PREFERENCES_USER)){
             startActivity(new Intent(this, Passwords.class));
@@ -55,8 +60,12 @@ public class Login extends AccountAuthenticatorActivity {
                         JSONObject jsonBody = new JSONObject();
                         jsonBody.put("email", email.getText());
                         jsonBody.put("password", password.getText());
-                        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                "http://localhost:8000/api/auth/signin", jsonBody, new Response.Listener<JSONObject>() {
+                        VolleyUtils.makeJsonObjectRequest(l, DB.HTPP_URL_LOGIN,jsonBody, new VolleyResponseListener() {
+                            @Override
+                            public void onError(String message) {
+
+                            }
+
                             @Override
                             public void onResponse(JSONObject response) {
                                 SharedPreferences.Editor editor = mSettings.edit();
@@ -69,26 +78,9 @@ public class Login extends AccountAuthenticatorActivity {
                                     e.printStackTrace();
                                 }
                             }
-                        }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                JSONObject body;
-                                if(error.networkResponse.data!=null) {
-                                    try {
-                                        body = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
-                                        Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                    } catch (UnsupportedEncodingException e) {
-                                        e.printStackTrace();
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
                         });
-                        queue.add(request);
                     } catch (JSONException e) {
                         Log.e("MYAPP", "unexpected JSON exception", e);
-                        // Do something to recover ... or kill the app.
                     }
                 } else {
                     String toastMessage = "Username or Password are not populated";
@@ -96,6 +88,30 @@ public class Login extends AccountAuthenticatorActivity {
                 }
             }
         });
+    }
+
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:{
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            }
+            case MotionEvent.ACTION_UP:{
+                x2 = event.getX();
+                y2 = event.getY();
+                Display display = getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int width = size.x;
+                if(x1 <x2 && ((x2-x1)/width) > 0.6){
+                    startActivity(new Intent(Login.this, Register.class));
+                }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
+                    startActivity(new Intent(Login.this, MainActivity.class));
+                }
+            }
+        }
+        return false;
     }
 
 }
