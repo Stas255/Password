@@ -1,7 +1,6 @@
 package www.tolstonozhenko.password;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,8 +29,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import www.tolstonozhenko.password.classes.Password;
-
 public class User extends AppCompatActivity {
     private static SharedPreferences mSettings;
     private User u;
@@ -40,12 +37,12 @@ public class User extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        mSettings = getSharedPreferences(Login.APP_PREFERENCES, Context.MODE_PRIVATE);
+        mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
         u = this;
-        if(mSettings.contains(Login.APP_PREFERENCES_USER)){
+        if(mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
             userJs = null;
             try {
-                userJs = new JSONObject(mSettings.getString(Login.APP_PREFERENCES_USER, ""));
+                userJs = new JSONObject(mSettings.getString(LoginActivity.APP_PREFERENCES_USER, ""));
                 ((TextView) findViewById(R.id.textViewUserName)).setText(userJs.getString("username"));
                 ((TextView) findViewById(R.id.textViewEmail)).setText(userJs.getString("email"));
                 Button b = (Button) findViewById(R.id.buttonSend);
@@ -112,8 +109,8 @@ public class User extends AppCompatActivity {
 
                                         HashMap<String, String> headers = new HashMap<String, String>();
                                         String token = null;
-                                        if (mSettings.contains(Login.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(Login.APP_PREFERENCES_TOKEN, "");
+                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
                                         }
                                         headers.put("x-access-token", token);
 
@@ -142,10 +139,10 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem user = menu.findItem(R.id.action_user);
-        if(mSettings.contains(Login.APP_PREFERENCES_USER)){
+        if(mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
             JSONObject userJs = null;
             try {
-                userJs = new JSONObject(mSettings.getString(Login.APP_PREFERENCES_USER, ""));
+                userJs = new JSONObject(mSettings.getString(LoginActivity.APP_PREFERENCES_USER, ""));
                 user.setTitle(userJs.getString("username"));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -164,7 +161,7 @@ public class User extends AppCompatActivity {
             case R.id.action_user:
                 return true;
             case R.id.action_logout:
-                SharedPreferences mSettings = getSharedPreferences(Login.APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
                 mSettings.edit().clear().commit();
                 startActivity(new Intent(u, MainActivity.class));
                 return true;

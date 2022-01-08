@@ -1,10 +1,6 @@
 package www.tolstonozhenko.password;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,13 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,13 +21,13 @@ import www.tolstonozhenko.password.configuration.DB;
 import www.tolstonozhenko.password.request.VolleyResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
-public class Login extends AccountAuthenticatorActivity {
+public class LoginActivity extends AccountAuthenticatorActivity {
     float x1,x2,y1,y2;
     public static final String APP_PREFERENCES = "mysettings";
     public static final String APP_PREFERENCES_USER = "User";
     public static final String APP_PREFERENCES_TOKEN = "Token";
     SharedPreferences mSettings;
-    Login l;
+    LoginActivity l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +36,7 @@ public class Login extends AccountAuthenticatorActivity {
         setContentView(R.layout.activity_login);
         Button button = (Button) findViewById(R.id.bLogin);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        if(mSettings.contains(Login.APP_PREFERENCES_TOKEN) && mSettings.contains(Login.APP_PREFERENCES_USER)){
+        if(mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN) && mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
             startActivity(new Intent(this, Passwords.class));
         }
         button.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +62,7 @@ public class Login extends AccountAuthenticatorActivity {
                                     editor.putString(APP_PREFERENCES_TOKEN, response.getString("accessToken"));
                                     editor.putString(APP_PREFERENCES_USER, response.toString());
                                     editor.apply();
-                                    startActivity(new Intent(Login.this, Passwords.class));
+                                    startActivity(new Intent(LoginActivity.this, Passwords.class));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -105,9 +94,9 @@ public class Login extends AccountAuthenticatorActivity {
                 display.getSize(size);
                 int width = size.x;
                 if(x1 <x2 && ((x2-x1)/width) > 0.6){
-                    startActivity(new Intent(Login.this, Register.class));
+                    startActivity(new Intent(LoginActivity.this, Register.class));
                 }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
-                    startActivity(new Intent(Login.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
         }

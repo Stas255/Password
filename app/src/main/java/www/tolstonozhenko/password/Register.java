@@ -1,7 +1,5 @@
 package www.tolstonozhenko.password;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.accounts.AccountAuthenticatorActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -29,8 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Register extends AccountAuthenticatorActivity {
     float x1,x2,y1,y2;
@@ -68,7 +63,7 @@ public class Register extends AccountAuthenticatorActivity {
                             public void onResponse(String response) {
                                 String result = response;
                                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Register.this, Login.class));
+                                startActivity(new Intent(Register.this, LoginActivity.class));
                             }
                         }, new Response.ErrorListener() { // в случае возникновеня ошибки
                             @Override
@@ -126,7 +121,7 @@ public class Register extends AccountAuthenticatorActivity {
                 if(x1 <x2 && ((x2-x1)/width) > 0.6){
                     startActivity(new Intent(Register.this, MainActivity.class));
                 }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
-                    startActivity(new Intent(Register.this, Login.class));
+                    startActivity(new Intent(Register.this, LoginActivity.class));
                 }
             }
         }

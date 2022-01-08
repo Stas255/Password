@@ -2,33 +2,23 @@ package www.tolstonozhenko.password;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 import www.tolstonozhenko.password.configuration.DB;
 import www.tolstonozhenko.password.request.VolleyResponseListener;
@@ -85,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
                                 ((TextView) findViewById(R.id.TVUnicPasswordMain)).setVisibility(View.VISIBLE);
                                 TextView tVPass = (TextView) findViewById(R.id.TVUnicPasswordMain2);
                                 tVPass.setText("Time to hack " + response.getString("aboutPassword"));
+                                View view = MainActivity.this.getCurrentFocus();
+                                if (view != null) {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 display.getSize(size);
                 int width = size.x;
                 if(x1 <x2 && ((x2-x1)/width) > 0.6){
-                    startActivity(new Intent(MainActivity.this, Login.class));
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 }else if(x1 > x2 && ((x1-x2)/width) > 0.6){
                     startActivity(new Intent(MainActivity.this, Register.class));
                 }

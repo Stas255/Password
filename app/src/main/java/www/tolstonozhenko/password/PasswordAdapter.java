@@ -1,10 +1,8 @@
 package www.tolstonozhenko.password;
 
-import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -31,7 +28,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +45,7 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
         pPassword = password;
         pAction = action;
         pPasswords1 = passwords1;
-        mSettings = pPasswords1.getSharedPreferences(Login.APP_PREFERENCES, Context.MODE_PRIVATE);
+        mSettings = pPasswords1.getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -157,8 +153,8 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
                                         HashMap<String, String> headers = new HashMap<String, String>();
                                         String token = null;
-                                        if (mSettings.contains(Login.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(Login.APP_PREFERENCES_TOKEN, "");
+                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
                                         }
                                         headers.put("x-access-token", token);
 
@@ -244,8 +240,8 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
                                         HashMap<String, String> headers = new HashMap<String, String>();
                                         String token = null;
-                                        if (mSettings.contains(Login.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(Login.APP_PREFERENCES_TOKEN, "");
+                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
                                         }
                                         headers.put("x-access-token", token);
 
@@ -341,8 +337,8 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
                                             HashMap<String, String> headers = new HashMap<String, String>();
                                             String token = null;
-                                            if (mSettings.contains(Login.APP_PREFERENCES_TOKEN)) {
-                                                token = mSettings.getString(Login.APP_PREFERENCES_TOKEN, "");
+                                            if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                                                token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
                                             }
                                             headers.put("x-access-token", token);
 
@@ -398,8 +394,8 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
 
                                             HashMap<String, String> headers = new HashMap<String, String>();
                                             String token = null;
-                                            if (mSettings.contains(Login.APP_PREFERENCES_TOKEN)) {
-                                                token = mSettings.getString(Login.APP_PREFERENCES_TOKEN, "");
+                                            if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                                                token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
                                             }
                                             headers.put("x-access-token", token);
 
