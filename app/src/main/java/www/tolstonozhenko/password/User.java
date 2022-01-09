@@ -29,20 +29,20 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import www.tolstonozhenko.password.adapters.BugsSystemAdapter;
+import www.tolstonozhenko.password.configuration.Roles;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyStringResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class User extends AppCompatActivity {
     private static SharedPreferences mSettings;
-    private User u;
     JSONObject userJs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-        u = this;
         if(mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
             userJs = null;
             try {
@@ -72,7 +72,7 @@ public class User extends AppCompatActivity {
                         } else {
                             JSONObject jsonBody = new JSONObject();
                             try {
-                                RequestQueue queue = Volley.newRequestQueue(u);
+                                RequestQueue queue = Volley.newRequestQueue(User.this);
                                 jsonBody.put("email", userJs.getString("email"));
                                 jsonBody.put("newPassword", password);
                                 jsonBody.put("oldPassword", newPass);
@@ -102,7 +102,11 @@ public class User extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        if(Roles.IsAdmin(this)){
+            getMenuInflater().inflate(R.menu.main_admin_menu, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.main_menu, menu);
+        }
         return true;
     }
 
@@ -124,17 +128,41 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch(id){
-            case R.id.action_password :
-                startActivity(new Intent(u, Passwords.class));
-                return true;
-            case R.id.action_user:
-                return true;
-            case R.id.action_logout:
-                SharedPreferences mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-                mSettings.edit().clear().commit();
-                startActivity(new Intent(u, MainActivity.class));
-                return true;
+        if(Roles.IsAdmin(this)){
+            switch(id){
+                case R.id.user_block:
+                    AdminBugReportSystemActivity.report = BugsSystemAdapter.Report.USER_BLOCK;
+                    startActivity(new Intent(this, AdminBugReportSystemActivity.class));
+                    return true;
+                case R.id.user_bugs:
+                    AdminBugReportSystemActivity.report = BugsSystemAdapter.Report.USER_BUG;
+                    startActivity(new Intent(this, AdminBugReportSystemActivity.class));
+                    return true;
+                case R.id.system_bugs:
+                    AdminBugReportSystemActivity.report = BugsSystemAdapter.Report.SYSTEM_BUG;
+                    startActivity(new Intent(this, AdminBugReportSystemActivity.class));
+                    return true;
+                case R.id.action_user:
+                    return true;
+                case R.id.action_logout:
+                    SharedPreferences mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
+                    mSettings.edit().clear().commit();
+                    startActivity(new Intent(this, MainActivity.class));
+                    return true;
+            }
+        }else {
+            switch (id) {
+                case R.id.action_password:
+                    startActivity(new Intent(this, Passwords.class));
+                    return true;
+                case R.id.action_user:
+                    return true;
+                case R.id.action_logout:
+                    SharedPreferences mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
+                    mSettings.edit().clear().commit();
+                    startActivity(new Intent(this, MainActivity.class));
+                    return true;
+            }
         }
         //headerView.setText(item.getTitle());
         return super.onOptionsItemSelected(item);

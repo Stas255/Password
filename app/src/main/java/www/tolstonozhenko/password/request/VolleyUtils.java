@@ -41,7 +41,7 @@ public class VolleyUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if(error.networkResponse.statusCode == 401){
+                        if(error.networkResponse != null && error.networkResponse.statusCode == 401){
                             String text = null;
                             try {
                                 text = new String(error.networkResponse.data, "UTF-8");
@@ -59,6 +59,19 @@ public class VolleyUtils {
                         listener.onError(error.toString());
                     }
                 }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> headers = new HashMap<String, String>();
+                String token = null;
+                mSettings = context.getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
+                if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
+                    token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
+                }
+                headers.put("x-access-token", token);
+
+                return headers;
+            }
 
             @Override
             protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
@@ -103,7 +116,7 @@ public class VolleyUtils {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            if(error.networkResponse.statusCode == 401){
+                            if(error.networkResponse != null && error.networkResponse.statusCode == 401){
                                 String text = null;
                                 try {
                                     text = new String(error.networkResponse.data, "UTF-8");
@@ -191,7 +204,7 @@ public class VolleyUtils {
                                 e.printStackTrace();
                             }
                         }
-                        if(error.networkResponse.statusCode == 401){
+                        if(error.networkResponse != null && error.networkResponse.statusCode == 401){
                             String text = null;
                             try {
                                 text = new String(error.networkResponse.data, "UTF-8");

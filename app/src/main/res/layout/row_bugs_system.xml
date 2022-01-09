@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="visible">
+
+    <TextView
+        android:id="@+id/bug_file_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Test"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/b_get_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:insetLeft="20dp"
+        android:insetRight="20dp"
+        android:text="Get Detail"
+        android:textSize="10sp"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/b_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:backgroundTint="#EF0E0E"
+        android:insetLeft="20dp"
+        android:insetRight="20dp"
+        android:text="Delete"
+        android:textSize="10sp" />
+
+
+</LinearLayout>

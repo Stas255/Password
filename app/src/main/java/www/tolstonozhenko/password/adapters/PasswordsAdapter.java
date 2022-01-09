@@ -1,4 +1,4 @@
-package www.tolstonozhenko.password;
+package www.tolstonozhenko.password.adapters;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import www.tolstonozhenko.password.Passwords;
+import www.tolstonozhenko.password.R;
 import www.tolstonozhenko.password.classes.Password;
 
 public class PasswordsAdapter extends RecyclerView.Adapter<PasswordsAdapter.ViewHolder> {

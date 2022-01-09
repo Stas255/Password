@@ -14,28 +14,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
+import www.tolstonozhenko.password.adapters.PasswordAdapter;
+import www.tolstonozhenko.password.adapters.PasswordsAdapter;
 import www.tolstonozhenko.password.classes.Password;
-import www.tolstonozhenko.password.configuration.Roles;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyJsonArrayResponseListener;
-import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class Passwords extends AppCompatActivity {

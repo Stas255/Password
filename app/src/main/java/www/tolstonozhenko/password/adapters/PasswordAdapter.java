@@ -1,4 +1,4 @@
-package www.tolstonozhenko.password;
+package www.tolstonozhenko.password.adapters;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,28 +16,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
+import www.tolstonozhenko.password.LoginActivity;
+import www.tolstonozhenko.password.Passwords;
+import www.tolstonozhenko.password.R;
 import www.tolstonozhenko.password.classes.Password;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyStringResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
-    enum Action {UPDATE, GET, CREATE, NONE}
+    public enum Action {UPDATE, GET, CREATE, NONE}
 
     Password pPassword;
     public Action pAction;
