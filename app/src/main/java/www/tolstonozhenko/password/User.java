@@ -1,16 +1,21 @@
 package www.tolstonozhenko.password;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,12 +43,13 @@ import www.tolstonozhenko.password.request.VolleyUtils;
 public class User extends AppCompatActivity {
     private static SharedPreferences mSettings;
     JSONObject userJs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-        if(mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
+        if (mSettings.contains(LoginActivity.APP_PREFERENCES_USER)) {
             userJs = null;
             try {
                 userJs = new JSONObject(mSettings.getString(LoginActivity.APP_PREFERENCES_USER, ""));
@@ -77,7 +83,7 @@ public class User extends AppCompatActivity {
                                 jsonBody.put("newPassword", password);
                                 jsonBody.put("oldPassword", newPass);
 
-                                VolleyUtils.makeStringObjectRequest(Request.Method.POST,User.this, URL.HTPP_URL_UPDATE_USER,jsonBody, new VolleyStringResponseListener() {
+                                VolleyUtils.makeStringObjectRequest(Request.Method.POST, User.this, URL.HTPP_URL_UPDATE_USER, jsonBody, new VolleyStringResponseListener() {
                                     @Override
                                     public void onError(String message) {
 
@@ -98,13 +104,24 @@ public class User extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        (findViewById(R.id.qr_image)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(User.this, Manifest.permission.CAMERA) !=
+                        PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(User.this, new String[]{Manifest.permission.CAMERA},
+                            50);
+                }
+                startActivity(new Intent(User.this, QRActivity.class));
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(Roles.IsAdmin(this)){
+        if (Roles.IsAdmin(this)) {
             getMenuInflater().inflate(R.menu.main_admin_menu, menu);
-        }else{
+        } else {
             getMenuInflater().inflate(R.menu.main_menu, menu);
         }
         return true;
@@ -113,7 +130,7 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem user = menu.findItem(R.id.action_user);
-        if(mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
+        if (mSettings.contains(LoginActivity.APP_PREFERENCES_USER)) {
             JSONObject userJs = null;
             try {
                 userJs = new JSONObject(mSettings.getString(LoginActivity.APP_PREFERENCES_USER, ""));
@@ -128,8 +145,8 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(Roles.IsAdmin(this)){
-            switch(id){
+        if (Roles.IsAdmin(this)) {
+            switch (id) {
                 case R.id.user_block:
                     AdminBugReportSystemActivity.report = BugsSystemAdapter.Report.USER_BLOCK;
                     startActivity(new Intent(this, AdminBugReportSystemActivity.class));
@@ -150,7 +167,7 @@ public class User extends AppCompatActivity {
                     startActivity(new Intent(this, MainActivity.class));
                     return true;
             }
-        }else {
+        } else {
             switch (id) {
                 case R.id.action_password:
                     startActivity(new Intent(this, Passwords.class));
