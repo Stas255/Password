@@ -17,8 +17,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import www.tolstonozhenko.password.configuration.DB;
-import www.tolstonozhenko.password.request.VolleyResponseListener;
+import www.tolstonozhenko.password.configuration.Roles;
+import www.tolstonozhenko.password.configuration.URL;
+import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
@@ -27,17 +28,20 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     public static final String APP_PREFERENCES_USER = "User";
     public static final String APP_PREFERENCES_TOKEN = "Token";
     SharedPreferences mSettings;
-    LoginActivity l;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.l = this;
+        Roles.CheckLogin(this);
         setContentView(R.layout.activity_login);
         Button button = (Button) findViewById(R.id.bLogin);
         mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         if(mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN) && mSettings.contains(LoginActivity.APP_PREFERENCES_USER)){
-            startActivity(new Intent(this, Passwords.class));
+            if(Roles.IsAdmin(this)){
+                startActivity(new Intent(this, MainAdminActivity.class));
+            }else{
+                startActivity(new Intent(this, Passwords.class));
+            }
         }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +53,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                         JSONObject jsonBody = new JSONObject();
                         jsonBody.put("email", email.getText());
                         jsonBody.put("password", password.getText());
-                        VolleyUtils.makeJsonObjectRequest(l, DB.HTPP_URL_LOGIN,jsonBody, new VolleyResponseListener() {
+                        VolleyUtils.makeJsonObjectRequest(LoginActivity.this, URL.HTPP_URL_LOGIN,jsonBody, new VolleyJsonResponseListener() {
                             @Override
                             public void onError(String message) {
 
@@ -62,7 +66,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
                                     editor.putString(APP_PREFERENCES_TOKEN, response.getString("accessToken"));
                                     editor.putString(APP_PREFERENCES_USER, response.toString());
                                     editor.apply();
-                                    startActivity(new Intent(LoginActivity.this, Passwords.class));
+                                    Roles.CheckLogin(LoginActivity.this);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -103,4 +107,9 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         return false;
     }
 
+    @Override
+    protected void onStart() {
+        Roles.CheckLogin(this);
+        super.onStart();
+    }
 }

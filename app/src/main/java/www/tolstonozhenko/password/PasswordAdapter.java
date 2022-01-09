@@ -32,6 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import www.tolstonozhenko.password.classes.Password;
+import www.tolstonozhenko.password.configuration.URL;
+import www.tolstonozhenko.password.request.VolleyStringResponseListener;
+import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
     enum Action {UPDATE, GET, CREATE, NONE}
@@ -112,8 +115,12 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                             try {
                                 jsonBody.put("name", namePass);
                                 jsonBody.put("password", newPass);
-                                final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                        "http://localhost:8000/api/user/savepassword", new Response.Listener<String>() {
+                                VolleyUtils.makeStringObjectRequest(Request.Method.POST,pPasswords1, URL.HTPP_URL_USER_SAVE_PASSWORD,jsonBody, new VolleyStringResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+
+                                    }
+
                                     @Override
                                     public void onResponse(String response) {
                                         String newPass = response;
@@ -122,47 +129,7 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                                         holder.ETUnicPassword.setFocusable(false);
                                         pPasswords1.setAllPaswords();
                                     }
-                                }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        JSONObject body;
-                                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                                            try {
-                                                body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                                Toast.makeText(pPasswords1.getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                }) {
-                                    @Override
-                                    public byte[] getBody() throws AuthFailureError {
-                                        return jsonBody.toString().getBytes();
-                                    }
-
-                                    @Override
-                                    public String getBodyContentType() {
-                                        return "application/json";
-                                    }
-
-                                    @Override
-                                    public Map<String, String> getHeaders() throws AuthFailureError {
-
-                                        HashMap<String, String> headers = new HashMap<String, String>();
-                                        String token = null;
-                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                                        }
-                                        headers.put("x-access-token", token);
-
-                                        return headers;
-                                    }
-                                };
-                                ;
-                                queue.add(request);
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -200,8 +167,12 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                             try {
                                 jsonBody.put("passwordId", pPassword.id);
                                 jsonBody.put("password", password);
-                                final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                        "http://localhost:8000/api/user/getpassword", new Response.Listener<String>() {
+                                VolleyUtils.makeStringObjectRequest(Request.Method.POST,pPasswords1, URL.HTPP_URL_USER_GET_PASSWORD,jsonBody, new VolleyStringResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+
+                                    }
+
                                     @Override
                                     public void onResponse(String response) {
                                         String newPass = response;
@@ -209,47 +180,7 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                                         holder.ETUnicPassword.setText(newPass);
                                         holder.ETUnicPassword.setFocusable(false);
                                     }
-                                }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        JSONObject body;
-                                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                                            try {
-                                                body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                                Toast.makeText(pPasswords1.getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                }) {
-                                    @Override
-                                    public byte[] getBody() throws AuthFailureError {
-                                        return jsonBody.toString().getBytes();
-                                    }
-
-                                    @Override
-                                    public String getBodyContentType() {
-                                        return "application/json";
-                                    }
-
-                                    @Override
-                                    public Map<String, String> getHeaders() throws AuthFailureError {
-
-                                        HashMap<String, String> headers = new HashMap<String, String>();
-                                        String token = null;
-                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                                        }
-                                        headers.put("x-access-token", token);
-
-                                        return headers;
-                                    }
-                                };
-                                ;
-                                queue.add(request);
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -295,115 +226,35 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                                 JSONObject jsonBody = new JSONObject();
                                 jsonBody.put("passwordId", pPassword.id);
                                 jsonBody.put("passwordName", namePass);
-
-                                if (!changepassword) {
-                                    final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                            "http://localhost:8000/api/user/resetpassword", new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-                                            String result = response;
-                                            Toast.makeText(pPasswords1.getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                                            pPasswords1.setAllPaswords();
-                                            HideAll(holder);
-                                        }
-                                    }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            JSONObject body;
-                                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                                try {
-                                                    body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                                    Toast.makeText(pPasswords1.getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                                } catch (UnsupportedEncodingException e) {
-                                                    e.printStackTrace();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-                                    }) {
-                                        @Override
-                                        public byte[] getBody() throws AuthFailureError {
-                                            return jsonBody.toString().getBytes();
-                                        }
-
-                                        @Override
-                                        public String getBodyContentType() {
-                                            return "application/json";
-                                        }
-
-                                        @Override
-                                        public Map<String, String> getHeaders() throws AuthFailureError {
-
-                                            HashMap<String, String> headers = new HashMap<String, String>();
-                                            String token = null;
-                                            if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
-                                                token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                                            }
-                                            headers.put("x-access-token", token);
-
-                                            return headers;
-                                        }
-                                    };
-                                    ;
-                                    queue.add(request);
-                                } else {
+                                if (changepassword) {
                                     jsonBody.put("passwordId", pPassword.id);
                                     jsonBody.put("passwordName", namePass);
                                     jsonBody.put("password", password);
                                     jsonBody.put("passwordNew", newPassword);
-                                    final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                            "http://localhost:8000/api/user/resetpassword", new Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
+                                }
+                                boolean finalChangepassword = changepassword;
+                                VolleyUtils.makeStringObjectRequest(Request.Method.POST,pPasswords1, URL.HTPP_URL_USER_RESET_PASSWORD,jsonBody, new VolleyStringResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(String response) {
+                                        if(!finalChangepassword){
+                                            String result = response;
+                                            Toast.makeText(pPasswords1.getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                                            pPasswords1.setAllPaswords();
+                                            HideAll(holder);
+                                        }else{
                                             String newPass = response;
                                             holder.LUnicPassword.setVisibility(View.VISIBLE);
                                             holder.ETUnicPassword.setText(newPass);
                                             holder.ETUnicPassword.setFocusable(false);
                                             pPasswords1.setAllPaswords();
                                         }
-                                    }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            JSONObject body;
-                                            if (error.networkResponse != null && error.networkResponse.data != null) {
-                                                try {
-                                                    body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                                    Toast.makeText(pPasswords1.getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                                    pPasswords1.setAllPaswords();
-                                                } catch (UnsupportedEncodingException e) {
-                                                    e.printStackTrace();
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-                                    }) {
-                                        @Override
-                                        public byte[] getBody() throws AuthFailureError {
-                                            return jsonBody.toString().getBytes();
-                                        }
-
-                                        @Override
-                                        public String getBodyContentType() {
-                                            return "application/json";
-                                        }
-
-                                        @Override
-                                        public Map<String, String> getHeaders() throws AuthFailureError {
-
-                                            HashMap<String, String> headers = new HashMap<String, String>();
-                                            String token = null;
-                                            if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
-                                                token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                                            }
-                                            headers.put("x-access-token", token);
-
-                                            return headers;
-                                        }
-                                    };
-                                    queue.add(request);
-                                }
+                                    }
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

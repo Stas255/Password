@@ -29,6 +29,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import www.tolstonozhenko.password.configuration.URL;
+import www.tolstonozhenko.password.request.VolleyStringResponseListener;
+import www.tolstonozhenko.password.request.VolleyUtils;
+
 public class User extends AppCompatActivity {
     private static SharedPreferences mSettings;
     private User u;
@@ -72,52 +76,18 @@ public class User extends AppCompatActivity {
                                 jsonBody.put("email", userJs.getString("email"));
                                 jsonBody.put("newPassword", password);
                                 jsonBody.put("oldPassword", newPass);
-                                final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                        "http://localhost:8000/api/user/updateUser", new Response.Listener<String>() {
+
+                                VolleyUtils.makeStringObjectRequest(Request.Method.POST,User.this, URL.HTPP_URL_UPDATE_USER,jsonBody, new VolleyStringResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+
+                                    }
+
                                     @Override
                                     public void onResponse(String response) {
                                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                                     }
-                                }, new Response.ErrorListener() { // в случае возникновеня ошибки
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        JSONObject body;
-                                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                                            try {
-                                                body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                                Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                                            } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-                                }) {
-                                    @Override
-                                    public byte[] getBody() throws AuthFailureError {
-                                        return jsonBody.toString().getBytes();
-                                    }
-
-                                    @Override
-                                    public String getBodyContentType() {
-                                        return "application/json";
-                                    }
-
-                                    @Override
-                                    public Map<String, String> getHeaders() throws AuthFailureError {
-
-                                        HashMap<String, String> headers = new HashMap<String, String>();
-                                        String token = null;
-                                        if (mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)) {
-                                            token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                                        }
-                                        headers.put("x-access-token", token);
-
-                                        return headers;
-                                    }
-                                };
-                                queue.add(request);
+                                });
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }

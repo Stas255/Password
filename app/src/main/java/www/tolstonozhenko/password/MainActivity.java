@@ -20,8 +20,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import www.tolstonozhenko.password.configuration.DB;
-import www.tolstonozhenko.password.request.VolleyResponseListener;
+import www.tolstonozhenko.password.configuration.URL;
+import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    VolleyUtils.makeJsonObjectRequest(MainActivity.this, DB.HTPP_URL_GET_UNIC_PASSWORD, jsonBody, new VolleyResponseListener() {
+                    VolleyUtils.makeJsonObjectRequest(MainActivity.this, URL.HTPP_URL_GET_UNIC_PASSWORD, jsonBody, new VolleyJsonResponseListener() {
                         @Override
                         public void onError(String message) {
 

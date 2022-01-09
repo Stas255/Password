@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Password"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".MainAdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".User"
             android:exported="false" />
         <activity

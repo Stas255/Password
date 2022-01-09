@@ -32,6 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import www.tolstonozhenko.password.classes.Password;
+import www.tolstonozhenko.password.configuration.Roles;
+import www.tolstonozhenko.password.configuration.URL;
+import www.tolstonozhenko.password.request.VolleyJsonArrayResponseListener;
+import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
+import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class Passwords extends AppCompatActivity {
     RecyclerView pRecyclerView;
@@ -62,14 +67,26 @@ public class Passwords extends AppCompatActivity {
         });
     }
 
-    private static final String API_URL_USER = "http://localhost:8000/api/user/";
+    //private static final String API_URL_USER = "http://localhost:8000/api/user/getpasswords";
     private static SharedPreferences mSettings;
 
     public void setAllPaswords() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        //RequestQueue queue = Volley.newRequestQueue(this);
 
         mSettings = getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
 
+        VolleyUtils.makeJsonArrayObjectRequest(Request.Method.POST,Passwords.this, URL.HTPP_URL_USER_GET_ALL_PASSWORDS,null, new VolleyJsonArrayResponseListener() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(JSONArray response) {
+                SetPasswordsInLayout(response);
+            }
+        });
+        /*
         JsonArrayRequest jsObjRequest = new JsonArrayRequest(Request.Method.POST,
                 API_URL_USER + "getpasswords",null,
                 new Response.Listener<JSONArray>() {
@@ -110,7 +127,7 @@ public class Passwords extends AppCompatActivity {
                 return headers;
             }
         };
-        queue.add(jsObjRequest);
+        queue.add(jsObjRequest);*/
     }
 
     private void SetPasswordsInLayout(JSONArray responses) {
