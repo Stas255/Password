@@ -92,13 +92,13 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                         String newPass = holder.ETNewPassword.getText().toString();
                         String verPass = holder.ETVerNamePassword.getText().toString();
                         String err = "";
-                        if(!InputCheck.Check(holder.ETNamePassword, 6,null)){
+                        if(!InputCheck.Check(holder.ETNamePassword, 2,null)){
                             return;
                         }
-                        if(!InputCheck.Check(holder.ETNewPassword, 6,null)){
+                        if(!InputCheck.Check(holder.ETNewPassword, 2,null)){
                             return;
                         }
-                        if(!InputCheck.Check(holder.ETVerNamePassword, 6,null)){
+                        if(!InputCheck.Check(holder.ETVerNamePassword, 2,null)){
                             return;
                         }
                         if (!newPass.equals(verPass)) {
@@ -150,11 +150,11 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                         String namePass = pPassword.namePassword;
                         String password = holder.ETPassword.getText().toString();
                         String err = "";
+                        if(!InputCheck.Check(holder.ETPassword, 2,null)){
+                            return;
+                        }
                         if (namePass.isEmpty()) {
                             err += "Enter name password. ";
-                        }
-                        if (password.isEmpty()) {
-                            err += "Enter password. ";
                         }
                         if (!err.isEmpty()) {
                             Toast.makeText(pPasswords1.getApplicationContext(), err, Toast.LENGTH_SHORT).show();
@@ -204,16 +204,20 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                         String verPassword = holder.ETVerNamePassword.getText().toString();
                         boolean changepassword = false;
                         String err = "";
-                        if (namePass.isEmpty()) {
-                            err += "Enter name password. ";
+                        if(!InputCheck.Check(holder.ETNamePassword, 2,null)){
+                            return;
                         }
-                        if (!password.isEmpty()) {
-                            if (verPassword.isEmpty() || newPassword.isEmpty()) {
-                                err += "Enter new or ver password. If you want change password. ";
-                            } else if (!verPassword.equals(newPassword)) {
-                                err += "New pass not ver pass. ";
-                            }
-                            changepassword = true;
+                        if(!InputCheck.Check(holder.ETPassword, 2,null)){
+                            return;
+                        }
+                        if(!InputCheck.Check(holder.ETNewPassword, 2,null)){
+                            return;
+                        }
+                        if(!InputCheck.Check(holder.ETVerNamePassword, 2,null)){
+                            return;
+                        }
+                        if (!verPassword.equals(newPassword)) {
+                            err += "New pass not ver pass. ";
                         }
                         if (!err.isEmpty()) {
                             Toast.makeText(pPasswords1.getApplicationContext(), err, Toast.LENGTH_SHORT).show();
