@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import www.tolstonozhenko.password.classes.InputCheck;
 import www.tolstonozhenko.password.configuration.Roles;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
@@ -48,6 +49,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             public void onClick(View v) {
                 EditText email = (EditText) findViewById(R.id.etEmail);
                 EditText password = (EditText) findViewById(R.id.etPassword);
+                if(!InputCheck.Check(email, 6,null)){
+                    return;
+                }
+                if(!InputCheck.Check(password, 6,null)){
+                    return;
+                }
                 if (email.getText().length() > 0 && password.getText().length() > 0) {
                     try {
                         JSONObject jsonBody = new JSONObject();

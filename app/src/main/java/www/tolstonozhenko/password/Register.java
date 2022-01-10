@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import www.tolstonozhenko.password.classes.InputCheck;
 import www.tolstonozhenko.password.configuration.URL;
 
 public class Register extends AccountAuthenticatorActivity {
@@ -52,6 +53,15 @@ public class Register extends AccountAuthenticatorActivity {
                 EditText username = (EditText) findViewById(R.id.etUsername);
                 EditText email = (EditText) findViewById(R.id.etEmail);
                 EditText password = (EditText) findViewById(R.id.etPassword);
+                if(!InputCheck.Check(username, 6,null)){
+                    return;
+                }
+                if(!InputCheck.Check(email, 6,null)){
+                    return;
+                }
+                if(!InputCheck.Check(password, 6,null)){
+                    return;
+                }
                 if (email.getText().length() > 0 && password.getText().length() > 0 && username.getText().length() > 0) {
                     try {
                         JSONObject jsonBody = new JSONObject();

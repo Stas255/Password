@@ -77,48 +77,6 @@ public class Passwords extends AppCompatActivity {
                 SetPasswordsInLayout(response);
             }
         });
-        /*
-        JsonArrayRequest jsObjRequest = new JsonArrayRequest(Request.Method.POST,
-                API_URL_USER + "getpasswords",null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        SetPasswordsInLayout(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        JSONObject body;
-                        if(error.networkResponse != null && error.networkResponse.data!=null) {
-                            try {
-                                body = new JSONObject(new String(error.networkResponse.data,"UTF-8"));
-                                Toast.makeText(getApplicationContext(), body.getString("message"), Toast.LENGTH_SHORT).show();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                })
-
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-
-                HashMap<String, String> headers = new HashMap<String, String>();
-                String token = null;
-                if(mSettings.contains(LoginActivity.APP_PREFERENCES_TOKEN)){
-                    token = mSettings.getString(LoginActivity.APP_PREFERENCES_TOKEN, "");
-                }
-                headers.put("x-access-token", token);
-
-                return headers;
-            }
-        };
-        queue.add(jsObjRequest);*/
     }
 
     private void SetPasswordsInLayout(JSONArray responses) {
@@ -198,7 +156,6 @@ public class Passwords extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
         }
-        //headerView.setText(item.getTitle());
         return super.onOptionsItemSelected(item);
     }
 }

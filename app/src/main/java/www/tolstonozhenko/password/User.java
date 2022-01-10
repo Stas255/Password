@@ -181,7 +181,6 @@ public class User extends AppCompatActivity {
                     return true;
             }
         }
-        //headerView.setText(item.getTitle());
         return super.onOptionsItemSelected(item);
     }
 

@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import www.tolstonozhenko.password.classes.InputCheck;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyJsonResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 if(pass.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Enter test password", Toast.LENGTH_SHORT).show();
                 }else {
+                    if(!InputCheck.Check(findViewById(R.id.ETPasswordMain), 2,null)){
+                        return;
+                    }
                     RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
                     JSONObject jsonBody = new JSONObject();
                     try {

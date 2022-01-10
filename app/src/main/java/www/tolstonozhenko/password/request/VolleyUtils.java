@@ -136,7 +136,6 @@ public class VolleyUtils {
             }
         };
 
-        // Access the RequestQueue through singleton class.
         Volley.newRequestQueue(context).add(jsonObjectRequest);
         ;
     }

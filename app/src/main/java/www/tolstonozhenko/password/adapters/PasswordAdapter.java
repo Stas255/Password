@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import www.tolstonozhenko.password.LoginActivity;
 import www.tolstonozhenko.password.Passwords;
 import www.tolstonozhenko.password.R;
+import www.tolstonozhenko.password.classes.InputCheck;
 import www.tolstonozhenko.password.classes.Password;
 import www.tolstonozhenko.password.configuration.URL;
 import www.tolstonozhenko.password.request.VolleyStringResponseListener;
@@ -91,14 +92,14 @@ public class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHo
                         String newPass = holder.ETNewPassword.getText().toString();
                         String verPass = holder.ETVerNamePassword.getText().toString();
                         String err = "";
-                        if (namePass.isEmpty()) {
-                            err += "Enter name password. ";
+                        if(!InputCheck.Check(holder.ETNamePassword, 6,null)){
+                            return;
                         }
-                        if (newPass.isEmpty()) {
-                            err += "Enter new password. ";
+                        if(!InputCheck.Check(holder.ETNewPassword, 6,null)){
+                            return;
                         }
-                        if (verPass.isEmpty()) {
-                            err += "Enter ver password. ";
+                        if(!InputCheck.Check(holder.ETVerNamePassword, 6,null)){
+                            return;
                         }
                         if (!newPass.equals(verPass)) {
                             err += "New pass not ver pass. ";

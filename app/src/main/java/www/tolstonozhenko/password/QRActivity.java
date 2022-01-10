@@ -30,7 +30,6 @@ import www.tolstonozhenko.password.request.VolleyStringResponseListener;
 import www.tolstonozhenko.password.request.VolleyUtils;
 
 public class QRActivity extends AppCompatActivity {
-    int CAMERA_REQUEST_CODE = 101;
 
     CodeScanner mCodeScanner;
     SharedPreferences mSettings;
