@@ -100,7 +100,7 @@ public class BugsSystemAdapter extends RecyclerView.Adapter<BugsSystemAdapter.Vi
             holder.bBugDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    system.DeleteUserBlockReportById(userBloks.get(position).id);
+                    system.DeleteUserBlockReportById(userBloks.get(position).userId);
                 }
             });
         }

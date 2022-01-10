@@ -26,6 +26,7 @@ import java.util.Map;
 
 import www.tolstonozhenko.password.LoginActivity;
 import www.tolstonozhenko.password.MainActivity;
+import www.tolstonozhenko.password.classes.ErrorResponseParse;
 
 public class VolleyUtils {
     static SharedPreferences mSettings;
@@ -41,21 +42,8 @@ public class VolleyUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        if(error.networkResponse != null && error.networkResponse.statusCode == 401){
-                            String text = null;
-                            try {
-                                text = new String(error.networkResponse.data, "UTF-8");
-                                if(text.equals("Time working token lost!")){
-                                    SharedPreferences mSettings = context.getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-                                    mSettings.edit().clear().commit();
-                                    Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                                    context.startActivity(new Intent(context, LoginActivity.class));
-                                    return;
-                                }
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                        ErrorResponseParse errorResponseParse = new ErrorResponseParse(error);
+                        errorResponseParse.Parse(context);
                         listener.onError(error.toString());
                     }
                 }) {
@@ -102,37 +90,10 @@ public class VolleyUtils {
                         listener.onResponse(response);
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        JSONObject body;
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            try {
-                                body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                listener.onError(body.toString());
-                                return;
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            if(error.networkResponse != null && error.networkResponse.statusCode == 401){
-                                String text = null;
-                                try {
-                                    text = new String(error.networkResponse.data, "UTF-8");
-                                    if(text.equals("Time working token lost!")){
-                                        SharedPreferences mSettings = context.getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-                                        mSettings.edit().clear().commit();
-                                        Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                                        context.startActivity(new Intent(context, LoginActivity.class));
-                                        return;
-                                    }
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        error.printStackTrace();
+                        ErrorResponseParse errorResponseParse = new ErrorResponseParse(error);
+                        errorResponseParse.Parse(context);
                         listener.onError(error.toString());
                     }
                 }) {
@@ -192,34 +153,8 @@ public class VolleyUtils {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        JSONObject body;
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            try {
-                                body = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                                listener.onError(body.toString());
-                                return;
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        if(error.networkResponse != null && error.networkResponse.statusCode == 401){
-                            String text = null;
-                            try {
-                                text = new String(error.networkResponse.data, "UTF-8");
-                                if(text.equals("Time working token lost!")){
-                                    SharedPreferences mSettings = context.getSharedPreferences(LoginActivity.APP_PREFERENCES, Context.MODE_PRIVATE);
-                                    mSettings.edit().clear().commit();
-                                    Toast.makeText(context.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                                    context.startActivity(new Intent(context, LoginActivity.class));
-                                    return;
-                                }
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        error.printStackTrace();
+                        ErrorResponseParse errorResponseParse = new ErrorResponseParse(error);
+                        errorResponseParse.Parse(context);
                         listener.onError(error.toString());
                     }
                 }) {

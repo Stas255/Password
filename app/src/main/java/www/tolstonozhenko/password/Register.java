@@ -27,6 +27,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 
+import www.tolstonozhenko.password.configuration.URL;
+
 public class Register extends AccountAuthenticatorActivity {
     float x1,x2,y1,y2;
     public static final String APP_PREFERENCES = "mysettings";
@@ -58,7 +60,7 @@ public class Register extends AccountAuthenticatorActivity {
                         jsonBody.put("password", password.getText());
                         jsonBody.put("roles", "['user']");
                         final StringRequest request = new StringRequest(Request.Method.POST, //POST - API-запрос для получение данных
-                                "http://localhost:8000/api/auth/signup", new Response.Listener<String>() {
+                                URL.HTPP_URL_REGISTER, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
                                 String result = response;
